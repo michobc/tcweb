@@ -40,6 +40,23 @@ app.post("/createUser", async (req, res) => {
 });
 
 
+// Delete user route
+app.delete("/deleteUser/:userId", async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const deletedUser = await UserModel.findByIdAndDelete(userId);
+
+        if (!deletedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({ message: 'User deleted successfully', deletedUser });
+    } catch (error) {
+        res.status(500).json({ error: 'Error deleting user' });
+    }
+});
+
 // for the api to start with the port 
 // and a function to run when the server is running
 // we added "start": "nodemon index.js" in package.json it will run the server when we do npm start

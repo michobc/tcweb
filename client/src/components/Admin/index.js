@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
+import Axios from 'axios';
 // import './index.css';
 
 const Admin = () => {
@@ -6,22 +7,36 @@ const Admin = () => {
   const [passwordInput, setPasswordInput] = useState('');
   const [submissions, setSubmissions] = useState([]);
 
+  useEffect(() => {
+    Axios.get("http://localhost:3001/getUsers").then((response) => {
+      setSubmissions(response.data)
+    })  
+  }, []);
+
   const handleAdminLogin = () => {
     if (passwordInput === 'admin') {
       setIsAdmin(true);
-      // Mock submissions data - Replace this with actual data or API fetch
-      setSubmissions([
-        { firstName: 'John', lastName: 'Doe', ID: '123', reason: 'sick' },
-        { firstName: 'Alice', lastName: 'Smith', ID: '456', reason: 'vacation' },
-        // Add more submissions as needed
-      ]);
     } else {
       alert('Incorrect admin password');
     }
     setPasswordInput('');
   };
 
+  const processSubmission = (index, decision) => {
+    const submission = submissions[index];
+    const userId = submission._id;
+    setSubmissions(submissions.filter((_, i) => i !== index));
+  
+    Axios.delete(`http://localhost:3001/deleteUser/${userId}`).then((response) => {
+      // Store the message in localStorage
+      localStorage.setItem('adminMessage', `${decision}: ${submission.firstName} ${submission.lastName}`);
+      localStorage.setItem('messageStyle', (decision === 'Accepted' ? 'green' : 'red'));
+      alert('Response sent');
+    });
+  };
+
   return (
+    <>
     <div className="admin-container">
       <h1>Admin Panel</h1>
       {!isAdmin ? (
@@ -48,11 +63,18 @@ const Admin = () => {
               <p>
                 <strong>Reason:</strong> {submission.reason}
               </p>
+
+              <button onClick={() => processSubmission(index, 'Accepted')}>Accept</button>
+              <button onClick={() => processSubmission(index, 'Rejected')}>Reject</button>
             </div>
           ))}
         </div>
       )}
     </div>
+    <div className='buttonsReturn'>
+      <button onClick={() => window.location.href = '/'}>Return</button>
+    </div>
+    </>
   );
 };
 

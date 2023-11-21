@@ -1,7 +1,5 @@
 import React from 'react';
 import './index.css';
-// import Admin from './Admin'
-// import User from './User'
 
 const BigButtons = () => {
   return (
