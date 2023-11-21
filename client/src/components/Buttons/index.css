@@ -1,0 +1,34 @@
+/* BigButtonsComponent.css */
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .big-button {
+    padding: 30% 30%;
+    font-size: 50px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .big-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .blue {
+    background-color: #3498db;
+    color: #fff;
+  }
+  
+  .pink {
+    background-color: #e91e63;
+    color: #fff;
+    margin-left: 20px;
+  }
+  
